@@ -1,4 +1,4 @@
-from logica import acesso, credenciais
+from utils import credenciais, acesso
 
 class User:
     cont_instacia = 0 
@@ -6,11 +6,10 @@ class User:
     def __init__(self):
         User.cont_instacia += 1
         self.arquivo = f"banco_senhas{str(User.cont_instacia)}"
-        self.instan_crede = credenciais(self.arquivo)
-        self.instan_acesso = acesso()
+        self.instan_acesso = acesso(self.arquivo)
 
-    @staticmethod
-    def menu():
+   
+    def menu(self):
 
         while True:
 
@@ -21,28 +20,31 @@ class User:
 
             match input('\n'):
                 case '1':
-                    User.saidas()
+                    self.saidas()
                 case '2':
-                    especif = input("Digite seu site especifico: ")
-                    User.saidas(especif)
+                    especif = input("Digite seu site especifico: \n")
+                    self.saidas(especif)
                 case '3':
-                    User.novos_inputs()
+                    self.novos_inputs()
                 case '4':
-                    especif = input("Digite seu site especifico")
-                    User.remover(especif)
+                    especif = input("Digite seu site especifico\n")
+                    self.remover(especif)
                 case _:
                     print("Input invalido! ")
                     continue
 
     def novos_inputs(self):
-        self.instan_crede.novas_credenciais()
+        self.instan_acesso.novas_credenciais()
 
     def remover(self, especif):
-        self.instan_crede.remover_credenciais(especif)   
+        self.instan_acesso.remover_credenciais(especif)   
 
     def saidas(self, especif=None):
         
         if especif:
-            self.instan_acesso.saida_especificada()
+            self.instan_acesso.saida_especificada(especif)
         else:
-            self.instan_acesso.saida() 
+            self.instan_acesso.saida()
+
+pessoa = User()
+pessoa.menu()
