@@ -1,5 +1,4 @@
 import json
-import os
 
 class metodos_internos:
 
@@ -13,14 +12,16 @@ class metodos_internos:
 
             with open(self.arquivo, 'r') as f:
                 dados = json.load(f)
-            self.seus_dados = dados
+            self.atributo_dados = dados
+
+            print("Sucesso!")
             
         except:
             print("Falhou...\n")
             print("Criando seu banco de dados")
-            self.seus_dados = self._arquivo_criar()
+            self.atributo_dados = self._arquivo_criar()
 
-        self.atributo_dados.self._arquivo_criar()
+       
 
     def _arquivo_criar(self):
 
@@ -45,7 +46,7 @@ class metodos_internos:
 
         for i in novos_dados:
             
-            verifica = self.dados.get(i)
+            verifica = self.atributo_dados.get(i)
 
             if verifica:
 
@@ -55,7 +56,11 @@ class metodos_internos:
             
         self._salvar(novos_dados)
                 
+    def _remove(self):
 
+        with open(self.arquivo, 'w') as f:
+            json.dump(self.atributo_dados, f)
+            
 
 class credenciais(metodos_internos):
     
@@ -87,24 +92,30 @@ class credenciais(metodos_internos):
 
     def remover_credenciais(self, especif):
         if especif in self.atributo_dados:
+
             del self.atributo_dados[especif]
+            self._remove()
+
+            print("\nChave excluida!")
         else:
             print("Chave inexistente! ")    
     
 
-class acesso(metodos_internos):
+class acesso(credenciais):
     
+    def __init__(self, arquivo):
+        super().__init__(arquivo)
+
     def saida(self):
         for chave, valor in self.atributo_dados.items():
             print(f'\t| {chave} | = ( {valor} )\n')
 
-    def saida_especificada(self):
-
-        especifica = input("Digite seu site especifico: ")
+    def saida_especificada(self,especifica):
 
         saida = self.atributo_dados.get(especifica)
 
         if saida:
             print(f'\t | {especifica} | = ({self.atributo_dados[especifica]})')
         else: 
-            print("Chave nao encontrada! ")    
+            print("Chave nao encontrada! ")   
+
